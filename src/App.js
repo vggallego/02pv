@@ -5,7 +5,11 @@ import NuevaCita from './components/NuevaCita'
 
 class App extends Component {
   state = {  
+    
+  }
 
+  createNuevaCita = datos => {
+    console.log(datos);
   }
   render() { 
     return (  
@@ -15,7 +19,9 @@ class App extends Component {
         />
         <div className="row">
           <div className="col-md10 mx-auto">
-            <NuevaCita />
+            <NuevaCita 
+              createNuevaCita={this.createNuevaCita}
+            />
           </div>
         </div>  
       </div>

@@ -8,9 +8,11 @@ class NuevaCita extends Component {
             fecha: '',
             hora: '',
             sintomas: ''
-        }
+        },
+        error: false
      }
 
+    //Cuando los usuarios escribe en los input
     handleChange = (e) => {
         console.log(e.target.name + ': ' + e.target.value);
 
@@ -21,6 +23,25 @@ class NuevaCita extends Component {
                 [e.target.name] : e.target.value
             }
         })
+    }
+
+    //Cuando el usuario envia el formulario
+    handleSubmit = e => {
+        e.preventDefault();
+
+        //extraer los valores del state
+        const { mascota, propietario, fecha, hora, sintomas} = this.state.cita;
+        //validar los campos
+        if (mascota === '' || propietario === '' || fecha === '' || hora === '' || sintomas === '') {
+            this.setState({
+                error: true
+            });
+            // detener la ejecucion
+            return;
+        } 
+        //agregar la cita al state
+        this.props.crearNuevaCita(this.state.cita);
+
     }
 
     render() { 
