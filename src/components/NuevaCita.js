@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
+import uuid from 'uuid';
+import PropTypes from 'prop-types';
+
+
+const stateInicial = { 
+    cita : {
+        mascota: '',
+        propietario: '',
+        fecha: '',
+        hora: '',
+        sintomas: ''
+    },
+    error: false
+ };
 
 class NuevaCita extends Component {
-    state = { 
-        cita : {
-            mascota: '',
-            propietario: '',
-            fecha: '',
-            hora: '',
-            sintomas: ''
-        },
-        error: false
-     }
+    state = { ...stateInicial};
 
     //Cuando los usuarios escribe en los input
     handleChange = (e) => {
@@ -38,20 +43,37 @@ class NuevaCita extends Component {
             });
             // detener la ejecucion
             return;
-        } 
-        //agregar la cita al state
-        this.props.crearNuevaCita(this.state.cita);
+        }
+        // generar objeto con los datos
+        const nuevaCita = {...this.state.cita};
+        nuevaCita.id = uuid();
 
+        //agregar la cita al state
+        this.props.crearNuevaCita(nuevaCita);
+
+        // colocar en el state el stateIncial
+        this.setState({
+            ...stateInicial
+        });
     }
 
     render() { 
+
+        //extraer valor del state
+        const { error } = this.state;
+
         return (  
             <div className="card mt-5 py-5">
                 <div className="card-body">
                     <h2 className="card-title text-center mb-5">
                         Rellena el formulario para crear una nueva cita
                     </h2>
-                    <form action="">
+
+                    { error ? <div className="alert alert-danger mt-2 mb-5 text-center">
+                        Todos los campos son obligatorios
+                    </div> : null}
+
+                    <form onSubmit={this.handleSubmit}>
                         <div className="form-group row">
                             <label className="col-sm-4 col-lg-2 col-form-label">
                                 Mascotas
@@ -135,4 +157,8 @@ class NuevaCita extends Component {
     }
 }
  
+NuevaCita.propTypes = {
+    crearNuevaCita: PropTypes.func.isRequired
+}
+
 export default NuevaCita;
